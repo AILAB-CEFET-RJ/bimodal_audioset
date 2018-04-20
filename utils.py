@@ -13,7 +13,7 @@ from keras.metrics import top_k_categorical_accuracy
 def top_3_accuracy(y_true, y_pred):
     return top_k_categorical_accuracy(y_true, y_pred, k=3)
 
-
+## From : https://github.com/DantesLegacy/TensorFlow_AudioSet_Example/blob/4ff964048ee528acb685e2af5d941353446a044b/src/neural_network_audioset.py
 ## Importante! Esta função está assumindo que existem um header de 3 linhas em cada CSV
 def get_file_name_labels_from_audioset_csv(row_num,csv_file,audioset_indices_csv):
     str_labels = []
@@ -21,10 +21,6 @@ def get_file_name_labels_from_audioset_csv(row_num,csv_file,audioset_indices_csv
     # Open choosen CSV file
     with open(csv_file, 'r') as f:
         # Skip to the line we need.
-        # I think this should stop it loading it up in memory for each item.
-        # Also, we add 3 to the number to skip the header in the CSV file.
-        # We could search through the CSV file using the file name, but this
-        #  will probably take much longer.
         line = next(itertools.islice(csv.reader(f), int(row_num) + 3, None))
         #print("line:",line)
         # Now that we have the line we need, we need to grab the labels from it
@@ -52,9 +48,9 @@ def get_file_name_labels_from_audioset_csv(row_num,csv_file,audioset_indices_csv
 
 
 
-def natural_sort(l): 
-    convert = lambda text: int(text) if text.isdigit() else text.lower() 
-    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)] 
+def natural_sort(l):
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     return sorted(l, key=alphanum_key)
 
 
@@ -76,14 +72,14 @@ def assure_path_exists(path):
     mydir = os.path.join(os.getcwd(), path)
     if not os.path.exists(mydir):
         os.makedirs(mydir)
-        
+
 def save_files(data_dir,features,labels,save_h5 = False):
     labels = k_hot_encode(labels,n_unique_labels = 7)
 
     print "Features of = ", features.shape
     print "Labels of = ", labels.shape
 
-    if save_h5:     
+    if save_h5:
         feature_file = os.path.join(data_dir + '_x.hdf5')
         labels_file = os.path.join(data_dir + '_y.hdf5')
         with h5py.File(feature_file, 'w') as hf:
@@ -95,12 +91,12 @@ def save_files(data_dir,features,labels,save_h5 = False):
         labels_file = os.path.join(data_dir + '_y.npy')
         np.save(feature_file, features)
         np.save(labels_file, labels)
-    
+
     print "Saved " + feature_file
     print "Saved " + labels_file
-    
-    
-    
+
+
+
 from sklearn.metrics import  f1_score, precision_score, recall_score,hamming_loss
 
 
@@ -134,14 +130,14 @@ class custom_metrics(Callback):
 
 
 def multilabel_confusion_matrix(eval_y,predictions,n_classes):
-    """ 
+    """
      Compute True positive,  True negative, False positive,False negative
      for a multilabel classification problem
-     
+
     https://github.com/scikit-learn/scikit-learn/issues/3452
-    http://www.cnts.ua.ac.be/~vincent/pdf/microaverage.pdf 
+    http://www.cnts.ua.ac.be/~vincent/pdf/microaverage.pdf
     """
-    
+
     def check_predicted_labels(label_no,predictions):
         TP = 0
         FP = 0
@@ -155,7 +151,7 @@ def multilabel_confusion_matrix(eval_y,predictions,n_classes):
             elif(val[label_no] == 1 and eval_y[idx][label_no] == 0):
                 FP += 1
             elif(val[label_no] == 0 and eval_y[idx][label_no] == 1):
-                FN += 1 
+                FN += 1
         return(TP, FP, TN, FN)
 
 
@@ -163,8 +159,8 @@ def multilabel_confusion_matrix(eval_y,predictions,n_classes):
     print("  TP,   FP,     TN,     FN, ")
     predicted_matrix = np.empty((0,4),dtype=int)
     for i in range(n_classes):
-        TP,FP, TN, FN = check_predicted_labels(i,predictions) 
-        temp = np.hstack([TP,FP,TN,FN]) 
+        TP,FP, TN, FN = check_predicted_labels(i,predictions)
+        temp = np.hstack([TP,FP,TN,FN])
         predicted_matrix = np.vstack([predicted_matrix,temp])
 
     for idx in range(n_classes):
@@ -175,14 +171,14 @@ def multilabel_confusion_matrix(eval_y,predictions,n_classes):
     print("Recall: %f"%recall_score(eval_y, predictions,average='micro'))
     print("Precision: %f"%precision_score(eval_y, predictions,average='micro'))
     print("Hamming Loss: %f"%hamming_loss(eval_y, predictions))
-  
-    
+
+
 def plot_history(hist):
     print "History keys:", (hist.history.keys())
      #summarise history for training and validation set accuracy
-    
+
     if ('val_loss' in hist.history):
-        for key in hist.history.keys():   
+        for key in hist.history.keys():
             if key[:4] == "val_":
                 continue
             elif(key == "lr"):
@@ -197,7 +193,7 @@ def plot_history(hist):
                 plt.legend(['train', 'validation'], loc='upper left')
                 plt.show()
     else:
-        for key in hist.history.keys():   
+        for key in hist.history.keys():
             plt.subplot()
             plt.plot(hist.history[key])
             plt.title('Model %s'%key)
@@ -206,9 +202,9 @@ def plot_history(hist):
             plt.legend(['train'], loc='upper left')
             plt.show()
 
-        
+
 def plot_metrics(metrics):
-    for key in metrics.custom_metrics.keys(): 
+    for key in metrics.custom_metrics.keys():
         plt.subplot()
         plt.plot(metrics.custom_metrics[key])
         plt.title('Model %s'%key)
@@ -216,16 +212,16 @@ def plot_metrics(metrics):
         plt.xlabel('epoch')
         plt.legend(['validation'], loc='upper left')
         plt.show()
-        
-        
-        
-        
-        
-        
-        
-        
-        
-# From:  https://github.com/philipperemy/keras-visualize-activations        
+
+
+
+
+
+
+
+
+
+# From:  https://github.com/philipperemy/keras-visualize-activations
 def get_activations(model, model_inputs, print_shape_only=True, layer_name=None):
     import keras.backend as K
     print('----- activations -----')
@@ -261,8 +257,7 @@ def get_activations(model, model_inputs, print_shape_only=True, layer_name=None)
             print(layer_activations)
     return activations
 
-# From:  https://github.com/philipperemy/keras-visualize-activations        
-
+# From:  https://github.com/philipperemy/keras-visualize-activations
 def display_activations(activation_maps):
     import numpy as np
     import matplotlib.pyplot as plt
@@ -298,5 +293,4 @@ def display_activations(activation_maps):
             raise Exception('len(shape) = 3 has not been implemented.')
         plt.imshow(activations, interpolation='None', cmap='jet')
         plt.show()
-        
-        
+
