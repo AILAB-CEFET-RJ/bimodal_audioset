@@ -35,7 +35,7 @@ In our project tried to limit to a max of 2000 examples per label (thus 2000max 
 Use Keras + Tensorflow to create a neural network to predict the labels associated with the audio and video samples combined.
 
 The Bimodal architecture is presented on [Multimodal.ipynb](Multimodal.ipynb)
-We also ran experiments on audio and video only networks to check if the bimodal network as really an improvement. These experiments can be found on the other jupyter notebooks (such as [2000video.ipynb](2000video.ipynb)). Also we ran a lot of visualization to check the learning process of the bimodal network, the visualizations can be found on [KERAS-VIS_activation_maximization.ipynb](KERAS-VIS_activation_maximization.ipynb)
+We also ran experiments on audio and video only networks to check if the bimodal network as really an improvement. These experiments can be found on the other jupyter notebooks (such as [2000video.ipynb](2000video.ipynb)). Also we ran a lot of visualization to check the learning process of the bimodal network, the visualizations can be found on [KERAS-VIS_activation_maximization.ipynb](KERAS-VIS_activation_maximization.ipynb) and on (viz.ipynb)[viz.ipynb]
 
 You can view the class model activations for the video network in [https://www.youtube.com/watch?v=dTVbsootmiA]()
 
